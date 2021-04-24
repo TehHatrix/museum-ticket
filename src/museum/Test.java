@@ -23,17 +23,25 @@ public class Test
 
         @Override
         public void run() {
-            System.out.println("Current time : " + currentTime.format(format));
+            if(currentTime.format(format).equals("08:00")){
+                System.out.println("Museum Open : " + currentTime.format(format));
+            }
+            else if (currentTime.format(format).equals("18:00")){
+                System.out.println("Museum Closed! : " + currentTime.format(format));
+            }
+            else{
+                System.out.println("Current time : " + currentTime.format(format));
+            }
             currentTime = currentTime.plusHours(1);
         }
     }
 
     public static void main(String[] args) throws ParseException {
-        LocalDateTime actualDateTime = LocalDateTime.of(2018, Month.FEBRUARY, 25, 8, 0);
+        LocalDateTime actualDateTime = LocalDateTime.of(2018, Month.FEBRUARY, 25, 6, 0);
         DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
         Timer timer = new Timer();
         Task thetime = new Task(actualDateTime);
-        timer.schedule(thetime,1000, 2000);
+        timer.schedule(thetime,1000, 1000);
 
 
 
