@@ -23,7 +23,7 @@ public class Test
 
         @Override
         public void run() {
-            if(currentTime.format(format).equals("08:00")){
+            if(currentTime.format(format).equals("09:00")){
                 System.out.println("Museum Open : " + currentTime.format(format));
             }
             else if (currentTime.format(format).equals("18:00")){
