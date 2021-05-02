@@ -19,6 +19,14 @@ public class Test
 
         @Override
         public void run() {
+            if(currentTime.equals(TicketControl.getOpentime())){
+                TicketControl.open();
+                System.out.println("Ticket Counter Open : " + currentTime);
+            }
+            else if (currentTime.equals(TicketControl.getClosetime())){
+                TicketControl.close();
+                System.out.println("Ticket Counter Close : " + currentTime);
+            }
             if(currentTime.equals(Museum.getOpentime())){
                 Museum.open();
                 System.out.println("Museum open : " + currentTime);
