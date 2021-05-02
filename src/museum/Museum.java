@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Museum {
-    public final static LocalTime opentime = LocalTime.of(17,0);;
-    public final static LocalTime closetime = LocalTime.of(9,0);;
+    public final static LocalTime opentime = LocalTime.of(9,0);;
+    public final static LocalTime closetime = LocalTime.of(18,0);;
     //  total visitor of visitor
     public static final int MAX_SIZE = 900;
     //    current session

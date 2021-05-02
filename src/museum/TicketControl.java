@@ -9,7 +9,7 @@ public class TicketControl {
     LocalTime time_bought;
     final int MAX_TICKET = 9999;
     static final LocalTime opentime = LocalTime.of(8,0);
-    static final LocalTime closetime = LocalTime.of(5,0);
+    static final LocalTime closetime = LocalTime.of(17,0);
     static boolean opened;
 
     public TicketControl() {
