@@ -8,13 +8,13 @@ import java.util.Random;
 public class VisitorControl implements Runnable{
     private static List<String> visitor_ticket;
     public static LocalTime time_enter;
+    public static String current_ticketid = ""; //This will work only one thread :(
 
     public VisitorControl() {
         this.visitor_ticket = new ArrayList<>();
     }
 
 
-    //Buy ticket (probably ni ticket thread)
     public static void buyTicketandOverallFlow() throws InterruptedException {
         while(TicketControl.opened){
             Random random = new Random();
@@ -27,36 +27,41 @@ public class VisitorControl implements Runnable{
                 break;
             }
             System.out.println(Test.Task.getCurrentTime() + " " + visitor_ticket + " Sold");
-            entermuseum(num_of_guests,visitor_ticket);
-//            exitMuseum(num_of_guests,visitor_ticket);
+            //ataupun kita keluarkan individual ticket kat sini
+            for (String individual_ticket : visitor_ticket){
+                entermuseum(individual_ticket);
+                exitMuseum(individual_ticket);
+            }
+
         }
     }
 
     //Enter museum through random entrances
-    public static void entermuseum(int numguest, List<String> visitor_ticket){
+    public static void entermuseum(String visitor_ticket) throws InterruptedException {
         Random random = new Random();
         //Choose Entrance Gate
-        System.out.println(Museum.entrance_list.size());
         Entrance which_gate = Museum.entrance_list.get(random.nextInt(Museum.entrance_list.size()));
         //Enter the gate
-        which_gate.EnterQueueList(numguest,visitor_ticket);
+        which_gate.EnterQueueList(visitor_ticket);
     }
 
     //Stay at the museum for random time
-    public static void stayMuseum() throws InterruptedException {
+    public static void stayMuseum(String ticketid) throws InterruptedException {
         Random random = new Random();
         //Stay
         int staytime = random.nextInt(150) + 50;
+        System.out.println(Test.Task.getCurrentTime() +" Ticket ID : " + ticketid + " staying for " + staytime + " minutes");
         Thread.sleep(staytime);
+
     }
 
     //Exit museum through random exits
-    public static void exitMuseum(int numguest, List<String> visitor_ticket) throws InterruptedException {
+    public static void exitMuseum(String visitor_ticket) throws InterruptedException {
         Random random = new Random();
         //Choose Exit Gate
         Exit which_exit = Museum.exit_list.get(random.nextInt(Museum.exit_list.size()));
         //Exit the gate
-        which_exit.LetVisitorExit(numguest,visitor_ticket);
+        which_exit.EnterQueueList(visitor_ticket);
     }
 
 
