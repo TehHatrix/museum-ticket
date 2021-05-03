@@ -10,15 +10,22 @@ public class Test
 
     static class Task extends TimerTask{
         LocalTime currentTime;
+        Thread visitorsystem;
 
         public Task(LocalTime currentTime) {
             this.currentTime = currentTime;
+            this.visitorsystem = new Thread(new VisitorControl());
+        }
+
+        public LocalTime getCurrentTime() {
+            return currentTime;
         }
 
         @Override
         public void run() {
             if(currentTime.equals(TicketControl.getOpentime())){
                 TicketControl.open();
+                visitorsystem.start();
                 System.out.println("Ticket Counter Open : " + currentTime);
             }
             else if (currentTime.equals(TicketControl.getClosetime())){
@@ -27,6 +34,7 @@ public class Test
             }
             if(currentTime.equals(Museum.getOpentime())){
                 Museum.open();
+                Museum.startEntrance();
                 System.out.println("Museum open : " + currentTime);
             }
             else if (currentTime.equals(Museum.getClosetime())){
@@ -41,11 +49,11 @@ public class Test
     }
 
     public static void main(String[] args) throws ParseException {
-        VisitorControl test = new VisitorControl();
-        Museum museum = new Museum();
         Timer timer = new Timer();
+        Museum museum = new Museum();
         Task thetime = new Task(LocalTime.of(8,0));
         timer.schedule(thetime,1000, 5000);
+
 
     }
 }

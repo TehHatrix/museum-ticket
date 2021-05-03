@@ -1,6 +1,7 @@
 package museum;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -21,7 +22,7 @@ public class Exit implements Runnable {
         this.current_turnstile_open = num_turnstiles;
     }
 
-    public void LetVisitorExit() throws InterruptedException {
+    public void LetVisitorExit(int numofguest, List<String> ticket) throws InterruptedException {
         //If the open turnstile is full
         //Turnstile condition will await (waiting for signal)
         while(true){
@@ -39,16 +40,13 @@ public class Exit implements Runnable {
             Turnstile_Full.signalAll();
             //Visitor exit the museum
             Museum.current_size--;
+            Turnstile_Full.signal();
         }
 
     }
 
     @Override
     public void run() {
-        try {
-            LetVisitorExit();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
     }
 }

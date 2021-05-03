@@ -12,11 +12,10 @@ public class Museum {
     //    current session
     public static int current_size;
     public static int total_enter;
-
-    Entrance south;
-    Entrance north;
-    Exit east;
-    Exit west;
+    public static Entrance south;
+    public static Entrance north;
+    public static Exit east;
+    public static Exit west;
     public static List<Entrance> entrance_list = new ArrayList<>();
     public static List<Exit> exit_list = new ArrayList<>();
     public static boolean opened;
@@ -46,6 +45,12 @@ public class Museum {
 //    public static void incrementSize(int visitor_number){
 //        current_size += visitor_number;
 //    }
+    public static void startEntrance(){
+        Thread south_entrance = new Thread(south);
+        Thread north_entrance = new Thread(north);
+        south_entrance.start();
+        north_entrance.start();
+    }
 
     public static void close(){
         opened = false;
