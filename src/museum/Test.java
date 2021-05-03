@@ -27,20 +27,24 @@ public class Test
             if(currentTime.equals(TicketControl.getOpentime())){
                 TicketControl.open();
                 visitorsystem.start();
-                System.out.println("Ticket Counter Open : " + currentTime);
+                System.out.println(currentTime + " Ticket Counter Open!" );
             }
             else if (currentTime.equals(TicketControl.getClosetime())){
                 TicketControl.close();
-                System.out.println("Ticket Counter Close : " + currentTime);
+                System.out.println(currentTime + " Ticket Counter Closed!" );
             }
             if(currentTime.equals(Museum.getOpentime())){
                 museum.open();
-                museum.startEntrance();
-                System.out.println("Museum open : " + currentTime);
+                try {
+                    museum.startEntranceExits();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(currentTime + " Museum Open!" );
             }
             else if (currentTime.equals(Museum.getClosetime())){
                 museum.close();
-                System.out.println("Museum closed! : " + currentTime);
+                System.out.println(currentTime + " Museum Closed!");
             }
             else{
                 System.out.println("Current time : " + currentTime);

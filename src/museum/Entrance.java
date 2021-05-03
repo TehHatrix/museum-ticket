@@ -55,7 +55,7 @@ public class Entrance implements Runnable {
                 System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_ticket_visitor + " entered the museum successfully!");
                 System.out.println("Museum Current Size : " + Museum.current_size);
                 System.out.println("Museum Total Size : " + Museum.total_enter);
-                VisitorControl.stayMuseum(current_ticket_visitor);
+
             }
 
 

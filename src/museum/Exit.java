@@ -26,6 +26,7 @@ public class Exit implements Runnable {
         queue.add(ticket);
     }
 
+
     public void LetVisitorExit() throws InterruptedException {
         lock.lock();
         //If the open turnstile is full
@@ -52,6 +53,7 @@ public class Exit implements Runnable {
                 System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_ticket_visitor + " exited the museum succesfully!");
                 Museum.current_size--;
                 System.out.println("Museum Current Size : " + Museum.current_size);
+                VisitorControl.stayMuseum(current_ticket_visitor);
             }
         }
         lock.unlock();

@@ -27,9 +27,9 @@ public class VisitorControl implements Runnable{
                 break;
             }
             System.out.println(Test.Task.getCurrentTime() + " " + visitor_ticket + " Sold");
-            //ataupun kita keluarkan individual ticket kat sini
             for (String individual_ticket : visitor_ticket){
                 entermuseum(individual_ticket);
+                //Current bug = exit selalu masuk dulu.
                 exitMuseum(individual_ticket);
             }
 

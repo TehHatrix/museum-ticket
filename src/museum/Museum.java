@@ -7,9 +7,7 @@ import java.util.List;
 public class Museum {
     public final static LocalTime opentime = LocalTime.of(9,0);;
     public final static LocalTime closetime = LocalTime.of(18,0);;
-    //  total visitor of visitor
     public static final int MAX_SIZE = 900;
-    //    current session
     public static int current_size;
     public static int total_enter;
     public static Entrance south;
@@ -41,15 +39,15 @@ public class Museum {
         return opentime;
     }
 
-
-//    public static void incrementSize(int visitor_number){
-//        current_size += visitor_number;
-//    }
-    public static void startEntrance(){
+    public static void startEntranceExits() throws InterruptedException {
         Thread south_entrance = new Thread(south);
         Thread north_entrance = new Thread(north);
+        Thread east_exit = new Thread(east);
+        Thread west_exit = new Thread(west);
         south_entrance.start();
         north_entrance.start();
+        east_exit.start();
+        west_exit.start();
     }
 
     public static void close(){
