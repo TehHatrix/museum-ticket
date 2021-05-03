@@ -50,6 +50,8 @@ public class Museum {
         Thread north_entrance = new Thread(north);
         south_entrance.start();
         north_entrance.start();
+        System.out.println(south_entrance.isAlive());
+        System.out.println(north_entrance.isAlive());
     }
 
     public static void close(){

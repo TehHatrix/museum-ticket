@@ -49,19 +49,19 @@ public class TicketControl {
     }
 
     public static List<String> getTicketID(int numguests) {
+        List<String> ticket_list = new ArrayList<>();
         if (purchase_ticket) {
-            List<String> ticket_list = new ArrayList<>();
             String first_word_id = "T";
-            for (int i = current_runningid; i < numguests; i++) {
+            for (int i = 0; i < numguests; i++) {
                 //T => T0 = T1 = T2
-                first_word_id += current_runningid;
-                ticket_list.add(first_word_id);
+//                first_word_id += current_runningid;
+                ticket_list.add(first_word_id.format("T%04d",current_runningid));
                 first_word_id = "T";
                 current_runningid++;
             }
             return ticket_list;
         }
-        return null;
+        return ticket_list;
     }
 }
 

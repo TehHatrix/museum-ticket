@@ -50,7 +50,6 @@ public class Test
 
     public static void main(String[] args) throws ParseException {
         Timer timer = new Timer();
-        Museum museum = new Museum();
         Task thetime = new Task(LocalTime.of(8,0));
         timer.schedule(thetime,1000, 5000);
 

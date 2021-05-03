@@ -1,16 +1,16 @@
 package museum;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class VisitorControl implements Runnable{
-    private static String ticketid;
+    private static List<String> visitor_ticket;
     public static LocalTime time_enter;
-    List<String> visitor_ticket;
-
 
     public VisitorControl() {
+        this.visitor_ticket = new ArrayList<>();
     }
 
 
@@ -22,10 +22,10 @@ public class VisitorControl implements Runnable{
             int purchase_delay = random.nextInt(5000) + 1000;
             Thread.sleep(purchase_delay);
             //get the ticket ID / buy the ticket
-            if(TicketControl.getTicketID(num_of_guests) == null){
+            visitor_ticket = TicketControl.getTicketID(num_of_guests);
+            if(visitor_ticket == null){
                 break;
             }
-            List<String> visitor_ticket = TicketControl.getTicketID(num_of_guests);
             System.out.println(visitor_ticket);
             entermuseum(num_of_guests,visitor_ticket);
 //            exitMuseum(num_of_guests,visitor_ticket);
