@@ -41,15 +41,15 @@ public class TicketControl {
 //        current_runningid += numguests;
 //    }
 
-    public static boolean checkMuseumTotalEnter() {
+    public static void checkMuseumTotalEnter() {
         if (Museum.total_enter >= 900) {
             purchase_ticket = false;
         }
-        return purchase_ticket;
     }
 
     public static List<String> getTicketID(int numguests) {
         List<String> ticket_list = new ArrayList<>();
+        checkMuseumTotalEnter();
         if (purchase_ticket) {
             String first_word_id = "T";
             for (int i = 0; i < numguests; i++) {

@@ -26,16 +26,17 @@ public class VisitorControl implements Runnable{
             if(visitor_ticket == null){
                 break;
             }
-            System.out.println(visitor_ticket);
+            System.out.println(Test.Task.getCurrentTime() + " " + visitor_ticket + " Sold");
             entermuseum(num_of_guests,visitor_ticket);
 //            exitMuseum(num_of_guests,visitor_ticket);
         }
     }
 
     //Enter museum through random entrances
-    public static void entermuseum(int numguest, List<String> visitor_ticket) throws InterruptedException {
+    public static void entermuseum(int numguest, List<String> visitor_ticket){
         Random random = new Random();
         //Choose Entrance Gate
+        System.out.println(Museum.entrance_list.size());
         Entrance which_gate = Museum.entrance_list.get(random.nextInt(Museum.entrance_list.size()));
         //Enter the gate
         which_gate.EnterQueueList(numguest,visitor_ticket);

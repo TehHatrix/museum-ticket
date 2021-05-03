@@ -27,8 +27,8 @@ public class Museum {
         this.north = new Entrance("North Entrance",4);
         this.east = new Exit("East Exit",4);
         this.west = new Exit("West Exit", 4);
-        entrance_list.add(south);
         entrance_list.add(north);
+        entrance_list.add(south);
         exit_list.add(east);
         exit_list.add(west);
     }
@@ -50,8 +50,6 @@ public class Museum {
         Thread north_entrance = new Thread(north);
         south_entrance.start();
         north_entrance.start();
-        System.out.println(south_entrance.isAlive());
-        System.out.println(north_entrance.isAlive());
     }
 
     public static void close(){

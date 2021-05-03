@@ -29,6 +29,7 @@ public class Entrance implements Runnable {
     }
 
     public void LetVisitorEnter() throws InterruptedException {
+        lock.lock(); //I think we need to use semaphore
         //While Museum Open && queue is not null
         while(Museum.opened && queue != null){
             if(Museum.total_enter == Museum.MAX_SIZE){
@@ -51,7 +52,7 @@ public class Entrance implements Runnable {
                     Thread.sleep(2000);
                     //Visitor got through the turnstile
                     current_turnstile_open++;
-                    Turnstile_Full.signalAll();
+                    Turnstile_Full.signal();
                     System.out.println("TicketID : " + ticketid_individual + " got through the turnstile");
                     //Visitor enter the museum
                     Museum.current_size++;
@@ -61,6 +62,7 @@ public class Entrance implements Runnable {
                 }
             }
         }
+        lock.unlock();
     }
 
 
