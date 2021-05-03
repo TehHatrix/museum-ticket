@@ -1,21 +1,32 @@
 package museum;
 
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Random;
 
 public class VisitorControl implements Runnable{
     private static String ticketid;
     public static LocalTime time_enter;
+    List<String> visitor_ticket;
+
 
     public VisitorControl() {
     }
 
 
-    //Buy ticket
-    public void buyTicket(){
-        Random random = new Random();
-        //buy ticket how randomly
-
+    //Buy ticket (probably ni ticket thread)
+    public void buyTicket() throws InterruptedException {
+        while(true){
+            Random random = new Random();
+            int num_of_guests = random.nextInt(5) + 1;
+            int purchase_delay = random.nextInt(500) + 100;
+            Thread.sleep(purchase_delay);
+            //get the ticket ID / buy the ticket
+            System.out.println(TicketControl.getTicketID(num_of_guests));
+            List<String> visitor_ticket = TicketControl.getTicketID(num_of_guests);
+            //increase running number ID
+            TicketControl.increment_runningid(num_of_guests);
+        }
     }
 
     //Enter museum through random entrances

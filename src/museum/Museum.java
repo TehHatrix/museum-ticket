@@ -43,9 +43,9 @@ public class Museum {
     }
 
 
-    public static void incrementSize(int visitor_number){
-        current_size += visitor_number;
-    }
+//    public static void incrementSize(int visitor_number){
+//        current_size += visitor_number;
+//    }
 
     public static void close(){
         opened = false;
