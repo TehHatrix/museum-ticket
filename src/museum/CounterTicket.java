@@ -1,6 +1,7 @@
 package museum;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -65,7 +66,9 @@ public class CounterTicket {
                     System.out.println("Museum is at max capacity. please wait until other visitor left");
                     museumFull.await();
                 }
+                int bobTime = bob.getTimeInside();
                 if(minuteInside.isAfter(closetime)) {
+                    bobTime = (int) currentTime.until(closetime, ChronoUnit.MINUTES);
                     minuteInside = closetime;
                 }
                 museumVisitor.put(bob.getTicket().getTicketId(), minuteInside);
@@ -73,12 +76,11 @@ public class CounterTicket {
                 count += 1;
                 if(rand.nextInt(2) == 0) {
                     System.out.println(currentTime + " Ticket " + bob.getTicket().getTicketId() + " entered through Turnstile SET" +
-                            count + " Staying for " + bob.getTimeInside() + " minutes. exiting at time : " + minuteInside);
+                            count + " Staying for " + bobTime + " minutes. exiting at time : " + minuteInside);
                 }else {
                     System.out.println(currentTime + " Ticket " + bob.getTicket().getTicketId() + " entered through Turnstile NET" +
-                            count + " Staying for " + bob.getTimeInside() + " minutes. exiting at time : " + minuteInside);
+                            count + " Staying for " + bobTime + " minutes. exiting at time : " + minuteInside);
                 }
-                System.out.println("current museumVisitor " + museumVisitor.size());
 
                 if(visitorQueue.isEmpty()) {
                     break;
