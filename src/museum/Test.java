@@ -1,50 +1,52 @@
-package museum;
-
-import java.sql.Time;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-public class Test
-{
-
-    static class Task extends TimerTask{
-        LocalDateTime currentTime;
-        DateTimeFormatter format;
-
-        public Task(LocalDateTime currentTime) {
-            this.currentTime = currentTime;
-            this.format = DateTimeFormatter.ofPattern("HH:mm");
-        }
-
-        @Override
-        public void run() {
-            if(currentTime.format(format).equals("08:00")){
-                System.out.println("Museum Open : " + currentTime.format(format));
-            }
-            else if (currentTime.format(format).equals("18:00")){
-                System.out.println("Museum Closed! : " + currentTime.format(format));
-            }
-            else{
-                System.out.println("Current time : " + currentTime.format(format));
-            }
-            currentTime = currentTime.plusHours(1);
-        }
-    }
-
-    public static void main(String[] args) throws ParseException {
-        LocalDateTime actualDateTime = LocalDateTime.of(2018, Month.FEBRUARY, 25, 6, 0);
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("HH:mm");
-        Timer timer = new Timer();
-        Task thetime = new Task(actualDateTime);
-        timer.schedule(thetime,1000, 1000);
-
-
-
-    }
-}
-
+//package museum;
+//
+//import java.sql.Time;
+//import java.text.ParseException;
+//import java.time.LocalTime;
+//import java.util.*;
+//
+//public class Test
+//{
+//
+//    static class Task extends TimerTask{
+//        LocalTime currentTime;
+//
+//        public Task(LocalTime currentTime) {
+//            this.currentTime = currentTime;
+//        }
+//
+//        @Override
+//        public void run() {
+//            if(currentTime.equals(TicketControl.getOpentime())){
+//                TicketControl.open();
+//                System.out.println("Ticket Counter Open : " + currentTime);
+//            }
+//            else if (currentTime.equals(TicketControl.getClosetime())){
+//                TicketControl.close();
+//                System.out.println("Ticket Counter Close : " + currentTime);
+//            }
+//            if(currentTime.equals(Museum.getOpentime())){
+//                Museum.open();
+//                System.out.println("Museum open : " + currentTime);
+//            }
+//            else if (currentTime.equals(Museum.getClosetime())){
+//                Museum.close();
+//                System.out.println("Museum closed! : " + currentTime);
+//            }
+//            else{
+//                System.out.println("Current time : " + currentTime);
+//            }
+//            currentTime = currentTime.plusHours(1);
+//        }
+//    }
+//
+//    public static void main(String[] args) throws ParseException {
+//        VisitorControl test = new VisitorControl();
+//        Museum museum = new Museum();
+//        Timer timer = new Timer();
+//        Task thetime = new Task(LocalTime.of(8,0));
+//        timer.schedule(thetime,1000, 5000);
+//
+//    }
+//}
+//
