@@ -28,8 +28,9 @@ public class VisitorControl implements Runnable{
             }
             System.out.println(Test.Task.getCurrentTime() + " " + visitor_ticket + " Sold");
             for (String individual_ticket : visitor_ticket){
+                //current bug = visitor tak masuk after kol 12 camtu
                 entermuseum(individual_ticket);
-                //Current bug = exit selalu masuk dulu.
+                //Current bug = exit selalu masuk dulu. (use service executor to make the delay?)
                 exitMuseum(individual_ticket);
             }
 

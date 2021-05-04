@@ -10,7 +10,7 @@ public class Exit implements Runnable {
     String name;
     int num_turnstiles;
     int current_turnstile_open;
-    Queue<String> queue;
+    Queue<String> queue; //not thread safe
     final Lock lock = new ReentrantLock();
     final Condition Turnstile_Full = lock.newCondition();
 

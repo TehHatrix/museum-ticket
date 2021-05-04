@@ -9,7 +9,7 @@ public class Entrance implements Runnable {
     String name;
     int num_turnstiles;
     int current_turnstile_open;
-    Queue<String> queue;
+    Queue<String> queue; //not thread safe
     final Lock lock = new ReentrantLock();
     final Condition Turnstile_Full = lock.newCondition();
 
@@ -29,7 +29,7 @@ public class Entrance implements Runnable {
     public void LetVisitorEnter() throws InterruptedException {
         lock.lock(); //Use Semaphore for more thread
         //While Museum Open
-        while (Museum.opened && queue != null) {
+        while (Museum.opened) {
             if (Museum.total_enter == Museum.MAX_SIZE) {
                 System.out.println("Total Enter is 900. Museum will not receiving more visitor & will close!");
                 Museum.close();

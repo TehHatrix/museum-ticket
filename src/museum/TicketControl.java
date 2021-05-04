@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TicketControl {
-    static int current_runningid = 0;
+    static volatile AtomicInteger current_runningid = new AtomicInteger(0); //for thread safe (multiple thread can use same value)
     LocalTime time_bought;
     final int MAX_TICKET = 9999;
     static final LocalTime opentime = LocalTime.of(8, 0);
@@ -55,9 +55,9 @@ public class TicketControl {
             for (int i = 0; i < numguests; i++) {
                 //T => T0 = T1 = T2
 //                first_word_id += current_runningid;
-                ticket_list.add(first_word_id.format("T%04d",current_runningid));
+                ticket_list.add(first_word_id.format("T%04d",current_runningid.get()));
                 first_word_id = "T";
-                current_runningid++;
+                current_runningid.incrementAndGet();
             }
             return ticket_list;
         }
