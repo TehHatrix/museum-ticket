@@ -18,8 +18,7 @@ public class CounterTicket {
     private int ticketId = 0;
     private volatile Queue<Visitor> visitorQueue = new ConcurrentLinkedQueue<>();
     private volatile ConcurrentHashMap<String, LocalTime> museumVisitor = new ConcurrentHashMap<>();
-//    public HashMap<Visitor, LocalTime> museumVisitor = new HashMap<>();
-//    private ArrayList<Visitor> museumVisitor = new ArrayList<>();
+
     private int totalVisitor = 0;
     public Random rand = new Random();
 
@@ -66,6 +65,9 @@ public class CounterTicket {
                     System.out.println("Museum is at max capacity. please wait until other visitor left");
                     museumFull.await();
                 }
+                if(minuteInside.isAfter(closetime)) {
+                    minuteInside = closetime;
+                }
                 museumVisitor.put(bob.getTicket().getTicketId(), minuteInside);
                 totalVisitor += 1;
                 count += 1;
@@ -110,7 +112,6 @@ public class CounterTicket {
                     System.out.println(currentTime + " Ticket " + entry.getKey() + " exited through exit");
                     museumFull.signalAll();
                 }
-
             }
 
         }finally {
