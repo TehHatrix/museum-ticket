@@ -3,6 +3,9 @@ package museum;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Museum {
     public final static LocalTime opentime = LocalTime.of(9,0);;
@@ -17,6 +20,9 @@ public class Museum {
     public static List<Entrance> entrance_list = new ArrayList<>();
     public static List<Exit> exit_list = new ArrayList<>();
     public static boolean opened;
+    public static Lock lock;
+    public static Condition Turnstile_Full;
+    public static Condition Museum_Full;
 
     public Museum(){
         this.current_size = 0;
@@ -25,6 +31,9 @@ public class Museum {
         this.north = new Entrance("North Entrance",4);
         this.east = new Exit("East Exit",4);
         this.west = new Exit("West Exit", 4);
+        this.lock =  new ReentrantLock();
+        this.Turnstile_Full = lock.newCondition();
+        this.Museum_Full = lock.newCondition();
         entrance_list.add(north);
         entrance_list.add(south);
         exit_list.add(east);

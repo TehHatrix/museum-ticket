@@ -1,17 +1,13 @@
 package museum;
 
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class VisitorControl implements Runnable{
-    private static List<String> visitor_ticket;
-    public static LocalTime time_enter;
-    public static String current_ticketid = ""; //This will work only one thread :(
+    private static CopyOnWriteArrayList<Ticket> visitor_ticket;
 
     public VisitorControl() {
-        this.visitor_ticket = new ArrayList<>();
+        this.visitor_ticket = new CopyOnWriteArrayList<Ticket>();
     }
 
 
@@ -19,50 +15,53 @@ public class VisitorControl implements Runnable{
         while(TicketControl.opened){
             Random random = new Random();
             int num_of_guests = random.nextInt(5) + 1;
-            int purchase_delay = random.nextInt(5000) + 1000;
+            int purchase_delay = random.nextInt(101) + 50;
             Thread.sleep(purchase_delay);
             //get the ticket ID / buy the ticket
             visitor_ticket = TicketControl.getTicketID(num_of_guests);
+            //means that it is closed so the thread will die here.
             if(visitor_ticket == null){
                 break;
             }
-            System.out.println(Test.Task.getCurrentTime() + " " + visitor_ticket + " Sold");
-            for (String individual_ticket : visitor_ticket){
-                //current bug = visitor tak masuk after kol 12 camtu
-                entermuseum(individual_ticket);
+            String ticket_sold = "";
+            for (int i = 0; i < visitor_ticket.size(); i++){
+                ticket_sold += visitor_ticket.get(i).getTicketId() + " ";
+            }
+            System.out.println(Test.Task.getCurrentTime() + " " + ticket_sold + " sold!");
+            for (Ticket individual_ticket : visitor_ticket){
+                Visitor visitor = new Visitor(individual_ticket);
+                entermuseum(visitor);
                 //Current bug = exit selalu masuk dulu. (use service executor to make the delay?)
-                exitMuseum(individual_ticket);
+//                exitMuseum(visitor);
             }
 
         }
     }
 
     //Enter museum through random entrances
-    public static void entermuseum(String visitor_ticket) throws InterruptedException {
+    public static void entermuseum(Visitor visitor) throws InterruptedException {
         Random random = new Random();
         //Choose Entrance Gate
         Entrance which_gate = Museum.entrance_list.get(random.nextInt(Museum.entrance_list.size()));
         //Enter the gate
-        which_gate.EnterQueueList(visitor_ticket);
+        System.out.println(visitor.getTicket().getTicketId() + " will be entering through " + which_gate.name);
+        which_gate.EnterQueueList(visitor);
     }
 
     //Stay at the museum for random time
-    public static void stayMuseum(String ticketid) throws InterruptedException {
+    public static int stayMuseum() throws InterruptedException {
         Random random = new Random();
-        //Stay
         int staytime = random.nextInt(150) + 50;
-        System.out.println(Test.Task.getCurrentTime() +" Ticket ID : " + ticketid + " staying for " + staytime + " minutes");
-        Thread.sleep(staytime);
-
+        return staytime;
     }
 
     //Exit museum through random exits
-    public static void exitMuseum(String visitor_ticket) throws InterruptedException {
+    public static void exitMuseum(Visitor visitor) throws InterruptedException {
         Random random = new Random();
         //Choose Exit Gate
         Exit which_exit = Museum.exit_list.get(random.nextInt(Museum.exit_list.size()));
         //Exit the gate
-        which_exit.EnterQueueList(visitor_ticket);
+//        which_exit.EnterQueueList(visitor_ticket);
     }
 
 

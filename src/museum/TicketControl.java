@@ -1,13 +1,11 @@
 package museum;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class TicketControl {
     static volatile AtomicInteger current_runningid = new AtomicInteger(0); //for thread safe (multiple thread can use same value)
-    LocalTime time_bought;
     final int MAX_TICKET = 9999;
     static final LocalTime opentime = LocalTime.of(8, 0);
     static final LocalTime closetime = LocalTime.of(17, 0);
@@ -37,9 +35,6 @@ public class TicketControl {
         System.out.println("Ticket Counter Closed!");
     }
 
-//    public static void increment_runningid(int numguests) {
-//        current_runningid += numguests;
-//    }
 
     public static void checkMuseumTotalEnter() {
         if (Museum.total_enter >= 900) {
@@ -47,21 +42,22 @@ public class TicketControl {
         }
     }
 
-    public static List<String> getTicketID(int numguests) {
-        List<String> ticket_list = new ArrayList<>();
+    //lupa nak tambah time bought bila (boleh je letak List / Hashmap *but kene fikir pasal thread safe collection)
+    public static CopyOnWriteArrayList<Ticket> getTicketID(int numguests) {
         checkMuseumTotalEnter();
         if (purchase_ticket) {
             String first_word_id = "T";
+            CopyOnWriteArrayList<Ticket> list_ticket = new CopyOnWriteArrayList<Ticket>();
+            Ticket ticket;
             for (int i = 0; i < numguests; i++) {
-                //T => T0 = T1 = T2
-//                first_word_id += current_runningid;
-                ticket_list.add(first_word_id.format("T%04d",current_runningid.get()));
+                ticket = new Ticket(first_word_id.format("T%04d", current_runningid.get()), Test.Task.getCurrentTime());
+                list_ticket.add(ticket);
                 first_word_id = "T";
                 current_runningid.incrementAndGet();
             }
-            return ticket_list;
+            return list_ticket;
         }
-        return ticket_list;
+        return null;
     }
 }
 
