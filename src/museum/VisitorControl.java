@@ -1,10 +1,10 @@
 package museum;
 
+import java.time.LocalTime;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-public class VisitorControl implements Runnable{
-    private static CopyOnWriteArrayList<Ticket> visitor_ticket;
+public class VisitorControl implements Runnable {
+    public static CopyOnWriteArrayList<Ticket> visitor_ticket;
 
     public VisitorControl() {
         this.visitor_ticket = new CopyOnWriteArrayList<Ticket>();
@@ -12,29 +12,31 @@ public class VisitorControl implements Runnable{
 
 
     public static void buyTicketandOverallFlow() throws InterruptedException {
-        while(TicketControl.opened){
+        while (TicketControl.opened) {
             Random random = new Random();
-            int num_of_guests = random.nextInt(5) + 1;
-            int purchase_delay = random.nextInt(101) + 50;
-            Thread.sleep(purchase_delay);
-            //get the ticket ID / buy the ticket
-            visitor_ticket = TicketControl.getTicketID(num_of_guests);
-            //means that it is closed so the thread will die here.
-            if(visitor_ticket == null){
-                break;
+            int num_of_guests = random.nextInt(4) + 1;
+            if (Test.Task.getCurrentTime().equals(Test.Task.getPurchaseTime())) {
+                //get the ticket ID / buy the ticket
+                visitor_ticket = TicketControl.getTicketID(num_of_guests);
+                //means that it is closed so the thread will die here.
+                if (visitor_ticket == null) {
+                    break;
+                }
+                String ticket_sold = "";
+                for (int i = 0; i < visitor_ticket.size(); i++) {
+                    ticket_sold += visitor_ticket.get(i).getTicketId() + " ";
+                }
+                System.out.println(Test.Task.getCurrentTime() + " " + ticket_sold + " sold!");
+                for (Ticket individual_ticket : visitor_ticket) {
+                    Visitor visitor = new Visitor(individual_ticket);
+                    entermuseum(visitor);
+                }
             }
-            String ticket_sold = "";
-            for (int i = 0; i < visitor_ticket.size(); i++){
-                ticket_sold += visitor_ticket.get(i).getTicketId() + " ";
-            }
-            System.out.println(Test.Task.getCurrentTime() + " " + ticket_sold + " sold!");
-            for (Ticket individual_ticket : visitor_ticket){
-                Visitor visitor = new Visitor(individual_ticket);
-                entermuseum(visitor);
-                //Current bug = exit selalu masuk dulu. (use service executor to make the delay?)
-//                exitMuseum(visitor);
-            }
-
+//            ongoing_purchase = false;
+//            if(!ongoing_purchase){
+//                PurchaseTime = PurchaseTime.plusMinutes(purchase_delay);
+//                ongoing_purchase = true;
+//            }
         }
     }
 
@@ -42,9 +44,10 @@ public class VisitorControl implements Runnable{
     public static void entermuseum(Visitor visitor) throws InterruptedException {
         Random random = new Random();
         //Choose Entrance Gate
+        //current bug it chose only one gate
         Entrance which_gate = Museum.entrance_list.get(random.nextInt(Museum.entrance_list.size()));
         //Enter the gate
-        System.out.println(visitor.getTicket().getTicketId() + " will be entering through " + which_gate.name);
+        visitor.setEntrance(which_gate);
         which_gate.EnterQueueList(visitor);
     }
 
@@ -63,7 +66,6 @@ public class VisitorControl implements Runnable{
         //Exit the gate
 //        which_exit.EnterQueueList(visitor_ticket);
     }
-
 
 
     public void run() {

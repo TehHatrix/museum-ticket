@@ -1,11 +1,7 @@
 package museum;
 
 import java.time.LocalTime;
-import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static museum.Museum.Museum_Full;
 import static museum.Museum.lock;
@@ -14,7 +10,7 @@ public class Entrance implements Runnable {
     String name;
     int num_turnstiles;
     int current_turnstile_open;
-    ConcurrentLinkedQueue<Visitor> queue; //not thread safe
+    ConcurrentLinkedQueue<Visitor> queue;
 
 
     public Entrance(String name, int num_turnstiles) {
@@ -47,7 +43,7 @@ public class Entrance implements Runnable {
             }
             if (queue.peek() != null) {
                 Visitor current_visitor = queue.poll();
-                System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_visitor + " will be entering the museum");
+                System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_visitor + " will be entering the museum through " + current_visitor.getEntrance().name);
                 System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_visitor + " getting into turnstile");
                 current_turnstile_open--;
 //                Thread.sleep(2000);
@@ -63,8 +59,9 @@ public class Entrance implements Runnable {
                 //Stay for how many minutes
                 int staytime = VisitorControl.stayMuseum();
                 current_visitor.setStaytime(staytime);
+                //Exit Museum
                 LocalTime exit_Time = Test.Task.getCurrentTime().plusMinutes(current_visitor.getStaytime());
-                Exit.AddConcurrentHashMap(current_visitor.getTicket().getTicketId(),exit_Time);
+                Exit.AddConcurrentHashMap(current_visitor,exit_Time);
                 System.out.println(Test.Task.getCurrentTime() + " TicketID : " + current_visitor + " will be staying for " + staytime + " minutes." + " Will be exiting at " + exit_Time);
             }
         }

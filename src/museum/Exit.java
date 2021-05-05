@@ -2,6 +2,7 @@ package museum;
 
 import java.time.LocalTime;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static museum.Museum.Museum_Full;
@@ -12,20 +13,19 @@ public class Exit implements Runnable {
     String name;
     int num_turnstiles;
     int current_turnstile_open;
-    public static ConcurrentHashMap<String, LocalTime> hmap;
+    public static ConcurrentHashMap<Visitor, LocalTime> hmap;
 
 
     public Exit(String name, int num_turnstiles) {
         this.name = name;
         this.num_turnstiles = num_turnstiles;
         this.current_turnstile_open = num_turnstiles;
-        this.hmap = new ConcurrentHashMap<String, LocalTime>();
+        this.hmap = new ConcurrentHashMap<Visitor, LocalTime>();
     }
 
 
-    public static void AddConcurrentHashMap(String ticket, LocalTime exittime) {
-        hmap.put(ticket, exittime);
-
+    public static void AddConcurrentHashMap(Visitor visitor, LocalTime exittime) {
+        hmap.put(visitor, exittime);
     }
 
 
@@ -40,15 +40,19 @@ public class Exit implements Runnable {
 //            while (current_turnstile_open == 0 || Museum.current_size == 100) {
 //                System.out.println("Turnstile is full! Some visitors will wait in queue");
 //                Turnstile_Full.await();
-//
-//            visitor getting to turnstile
-            Iterator<ConcurrentHashMap.Entry<String, LocalTime>> itr = hmap.entrySet().iterator();
+
+            Iterator<ConcurrentHashMap.Entry<Visitor, LocalTime>> itr = hmap.entrySet().iterator();
             while (itr.hasNext()) {
-                ConcurrentHashMap.Entry<String, LocalTime> entry = itr.next();
+                ConcurrentHashMap.Entry<Visitor, LocalTime> entry = itr.next();
                 if (entry.getValue().equals(Test.Task.getCurrentTime())) {
+                    //Choosing which exit
+                    Random random = new Random();
+                    Exit which_exit = Museum.exit_list.get(random.nextInt(Museum.exit_list.size()));
+                    entry.getKey().setExit(which_exit);
+                    //Exiting
                     Museum.current_size--;
                     hmap.remove(entry.getKey(), entry.getValue());
-                    System.out.println(Test.Task.getCurrentTime() + " Ticket " + entry.getKey() + " exited through exit");
+                    System.out.println(Test.Task.getCurrentTime() + " Ticket " + entry.getKey().getTicket().getTicketId() + " exited through exit " + entry.getKey().getExit());
                     Museum_Full.signalAll();
                 }
             }
