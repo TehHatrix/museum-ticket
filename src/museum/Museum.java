@@ -24,6 +24,7 @@ public class Museum {
     public static Condition Turnstile_Full;
     public static Condition Museum_Full;
 
+
     public Museum(){
         this.current_size = 0;
         this.total_enter = 0;

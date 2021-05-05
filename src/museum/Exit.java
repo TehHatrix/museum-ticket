@@ -4,16 +4,20 @@ import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static museum.Museum.Museum_Full;
-import static museum.Museum.lock;
-
 
 public class Exit implements Runnable {
     String name;
     int num_turnstiles;
     int current_turnstile_open;
     public static ConcurrentHashMap<Visitor, LocalTime> hmap;
+    public static Lock lock2 = new ReentrantLock();
+    public static Condition Turnstile_Full2 = lock2.newCondition();
+    public static Condition Museum_Full2 = lock2.newCondition();
 
 
     public Exit(String name, int num_turnstiles) {
@@ -30,12 +34,11 @@ public class Exit implements Runnable {
 
 
     public void LetVisitorExit() throws InterruptedException {
-        lock.lock();
-        while (true) {
+        lock2.lock();
+        while (Museum.opened) {
             if (Museum.current_size == 0 && Museum.opened == false) {
                 break;
             }
-            System.out.println("Shit");
 //            while (current_turnstile_open == 0 || Museum.current_size == 100) {
 //                System.out.println("Turnstile is full! Some visitors will wait in queue");
 //                Turnstile_Full.await();
@@ -50,8 +53,8 @@ public class Exit implements Runnable {
                     //Exiting
                     Museum.current_size--;
                     hmap.remove(entry.getKey(), entry.getValue());
-                    System.out.println(Test.Task.getCurrentTime() + " Ticket " + entry.getKey().getTicket().getTicketId() + " exited through exit " + entry.getKey().getExit());
-                    Museum_Full.signalAll();
+                    System.out.println(Test.Task.getCurrentTime() + " Ticket " + entry.getKey().getTicket().getTicketId() + " exited through exit " + entry.getKey().getExit().name);
+                    Museum_Full2.signalAll();
                 }
             }
 //            if (queue.peek() != null) {
@@ -70,7 +73,7 @@ public class Exit implements Runnable {
 ////                VisitorControl.stayMuseum(current_ticket_visitor);
 //            }
         }
-        lock.unlock();
+        lock2.unlock();
     }
 
     @Override
