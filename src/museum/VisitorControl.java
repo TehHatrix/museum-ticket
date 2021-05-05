@@ -16,27 +16,28 @@ public class VisitorControl implements Runnable {
             Random random = new Random();
             int num_of_guests = random.nextInt(4) + 1;
             if (Test.Task.getCurrentTime().equals(Test.Task.getPurchaseTime())) {
-                //get the ticket ID / buy the ticket
-                visitor_ticket = TicketControl.getTicketID(num_of_guests);
-                //means that it is closed so the thread will die here.
-                if (visitor_ticket == null) {
-                    break;
-                }
-                String ticket_sold = "";
-                for (int i = 0; i < visitor_ticket.size(); i++) {
-                    ticket_sold += visitor_ticket.get(i).getTicketId() + " ";
-                }
-                System.out.println(Test.Task.getCurrentTime() + " " + ticket_sold + " sold!");
-                for (Ticket individual_ticket : visitor_ticket) {
-                    Visitor visitor = new Visitor(individual_ticket);
-                    entermuseum(visitor);
+                //runbanyaksangat
+                // if (currenttime already run the method) *executed (test yang decide)
+                // = dont run the method
+                if(!Test.Task.executed){
+                    Test.Task.executed = true;
+                    //get the ticket ID / buy the ticket
+                    visitor_ticket = TicketControl.getTicketID(num_of_guests);
+                    //means that it is closed so the thread will die here.
+                    if (visitor_ticket == null) {
+                        break;
+                    }
+                    String ticket_sold = "";
+                    for (int i = 0; i < visitor_ticket.size(); i++) {
+                        ticket_sold += visitor_ticket.get(i).getTicketId() + " ";
+                    }
+                    System.out.println(Test.Task.getCurrentTime() + " " + ticket_sold + " sold!");
+                    for (Ticket individual_ticket : visitor_ticket) {
+                        Visitor visitor = new Visitor(individual_ticket);
+                        entermuseum(visitor);
+                    }
                 }
             }
-//            ongoing_purchase = false;
-//            if(!ongoing_purchase){
-//                PurchaseTime = PurchaseTime.plusMinutes(purchase_delay);
-//                ongoing_purchase = true;
-//            }
         }
     }
 
@@ -54,7 +55,7 @@ public class VisitorControl implements Runnable {
     //Stay at the museum for random time
     public static int stayMuseum() throws InterruptedException {
         Random random = new Random();
-        int staytime = random.nextInt(150) + 50;
+        int staytime = random.nextInt(101) + 50;
         return staytime;
     }
 

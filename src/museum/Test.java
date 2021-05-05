@@ -13,12 +13,14 @@ public class Test
         Museum museum = new Museum();
         public static LocalTime PurchaseTime;
         public static boolean ongoing_purchase;
+        public static boolean executed;
 
         public Task(LocalTime currentTime) {
             this.currentTime = currentTime;
             this.visitorsystem = new Thread(new VisitorControl());
             this.PurchaseTime = TicketControl.getOpentime();
             ongoing_purchase = false;
+            executed = false;
         }
 
         public static LocalTime getCurrentTime() {
@@ -61,15 +63,16 @@ public class Test
             if(!ongoing_purchase){
                 PurchaseTime = currentTime.plusMinutes(purchase_delay);
             }
-
             currentTime = currentTime.plusMinutes(1);
+            executed = false;
         }
     }
+
 
     public static void main(String[] args) throws ParseException {
         Timer timer = new Timer();
         Task thetime = new Task(LocalTime.of(8,0));
-        timer.schedule(thetime,0, 0);
+        timer.schedule(thetime,100, 100);
 
 
     }

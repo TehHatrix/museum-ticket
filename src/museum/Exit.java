@@ -31,16 +31,14 @@ public class Exit implements Runnable {
 
     public void LetVisitorExit() throws InterruptedException {
         lock.lock();
-        //If the open turnstile is full
-        //Turnstile condition will await (waiting for signal)
         while (true) {
             if (Museum.current_size == 0 && Museum.opened == false) {
                 break;
             }
+            System.out.println("Shit");
 //            while (current_turnstile_open == 0 || Museum.current_size == 100) {
 //                System.out.println("Turnstile is full! Some visitors will wait in queue");
 //                Turnstile_Full.await();
-
             Iterator<ConcurrentHashMap.Entry<Visitor, LocalTime>> itr = hmap.entrySet().iterator();
             while (itr.hasNext()) {
                 ConcurrentHashMap.Entry<Visitor, LocalTime> entry = itr.next();
